@@ -20,6 +20,7 @@ const translations = {
     'nav.about': 'Sobre',
     'nav.skills': 'Skills',
     'nav.projects': 'Projetos',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contato',
     'header.cta': 'Vamos conversar',
     
@@ -96,6 +97,10 @@ const translations = {
     'footer.made': 'Feito com',
     'footer.by': 'por Abson',
     'footer.description': 'Transformando ideias em realidade digital com paixão e inovação.',
+    
+    // Blog Section
+    'blog.subtitle': 'Conteúdo, dicas e novidades sobre tecnologia, carreira e desenvolvimento.',
+    'blog.seeMore': 'Ver mais',
   },
   en: {
     // Header
@@ -103,6 +108,7 @@ const translations = {
     'nav.about': 'About',
     'nav.skills': 'Skills',
     'nav.projects': 'Projects',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'header.cta': "Let's Talk",
     
@@ -179,6 +185,10 @@ const translations = {
     'footer.made': 'Made with',
     'footer.by': 'by Abson',
     'footer.description': 'Transforming ideas into digital reality with passion and innovation.',
+    
+    // Blog Section
+    'blog.subtitle': 'Content, tips and news about technology, career and development.',
+    'blog.seeMore': 'See more',
   },
   de: {
     // Header
@@ -186,6 +196,7 @@ const translations = {
     'nav.about': 'Über mich',
     'nav.skills': 'Fähigkeiten',
     'nav.projects': 'Projekte',
+    'nav.blog': 'Blog',
     'nav.contact': 'Kontakt',
     'header.cta': 'Lass uns reden',
     
@@ -262,6 +273,10 @@ const translations = {
     'footer.made': 'Erstellt mit',
     'footer.by': 'von Abson',
     'footer.description': 'Ideen mit Leidenschaft und Innovation in digitale Realität verwandeln.',
+    
+    // Blog Section
+    'blog.subtitle': 'Inhalte, Tipps und Neuigkeiten zu Technologie, Karriere und Entwicklung.',
+    'blog.seeMore': 'Mehr anzeigen',
   },
   es: {
     // Header
@@ -269,6 +284,7 @@ const translations = {
     'nav.about': 'Sobre mí',
     'nav.skills': 'Habilidades',
     'nav.projects': 'Proyectos',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contacto',
     'header.cta': 'Hablemos',
     
@@ -345,6 +361,10 @@ const translations = {
     'footer.made': 'Hecho con',
     'footer.by': 'por Abson',
     'footer.description': 'Transformando ideas en realidad digital con pasión e innovación.',
+    
+    // Blog Section
+    'blog.subtitle': 'Contenido, consejos y novedades sobre tecnología, carrera y desarrollo.',
+    'blog.seeMore': 'Ver más',
   },
 };
 

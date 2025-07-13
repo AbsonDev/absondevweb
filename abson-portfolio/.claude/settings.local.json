@@ -7,7 +7,15 @@
       "Bash(npm uninstall:*)",
       "Bash(rm:*)",
       "Bash(npx tailwindcss:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(del CodeCascade.tsx CircuitBoard.tsx)",
+      "WebFetch(domain:simpleicons.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:cdn.simpleicons.org)",
+      "Bash(mkdir:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

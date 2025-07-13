@@ -2,10 +2,12 @@
 
 import { motion } from 'framer-motion';
 import { Heart, Github, Linkedin, Mail } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
   return (
-    <footer className="bg-black border-t border-white/10 py-12">
+    <footer className="py-12" style={{ backgroundColor: 'var(--bg-primary)', borderTop: `1px solid var(--border-light)` }}>
       <div className="section-container">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left side */}
@@ -16,21 +18,24 @@ const Footer = () => {
             viewport={{ once: true }}
           >
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                   style={{
+                     background: `linear-gradient(to right, var(--color-primary-500), var(--color-primary-600))`
+                   }}>
                 <span className="text-white font-bold text-lg">A</span>
               </div>
               <span className="text-xl font-bold font-display">
-                <span className="text-white">Abson</span>
+                <span style={{ color: 'var(--text-primary)' }}>Abson</span>
                 <span className="text-gradient">.dev</span>
               </span>
             </div>
-            <p className="text-gray-400 mb-4">
-              Transformando ideias em realidade digital com paixão e inovação.
+            <p className="mb-4" style={{ color: 'var(--text-muted)' }}>
+              {t('footer.description')}
             </p>
-            <div className="flex items-center text-gray-400 text-sm">
-              <span>Feito com</span>
-              <Heart className="w-4 h-4 mx-1 text-red-500" />
-              <span>e muito ☕</span>
+            <div className="flex items-center text-sm" style={{ color: 'var(--text-muted)' }}>
+              <span>{t('footer.made')}</span>
+              <Heart className="w-4 h-4 mx-1 text-red-500" fill="currentColor" />
+              <span>{t('footer.by')}</span>
             </div>
           </motion.div>
 
@@ -51,7 +56,14 @@ const Footer = () => {
                 <motion.a
                   key={social.label}
                   href={social.href}
-                  className="w-10 h-10 glass rounded-lg flex items-center justify-center text-gray-400 hover:text-primary-400 transition-colors duration-300"
+                  className="w-10 h-10 glass rounded-lg flex items-center justify-center transition-colors duration-300"
+                  style={{ color: 'var(--text-muted)' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary-500)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--text-muted)';
+                  }}
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={social.label}
@@ -60,8 +72,8 @@ const Footer = () => {
                 </motion.a>
               ))}
             </div>
-            <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} Abson Santos. Todos os direitos reservados.
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+              © {new Date().getFullYear()} Abson Santos. {t('footer.rights')}.
             </p>
           </motion.div>
         </div>

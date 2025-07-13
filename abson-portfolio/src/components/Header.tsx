@@ -44,16 +44,13 @@ const Header = () => {
   }, []);
 
   // Navegação adaptativa baseada na página atual
-  const navItems = isOnBlogPage ? [
-    { name: t('nav.home'), href: '/', id: 'home', isExternal: true },
-    { name: 'Blog', href: '/blog', id: 'blog', isExternal: true, isActive: true },
-  ] : [
-    { name: t('nav.home'), href: '#home', id: 'home', isExternal: false },
-    { name: t('nav.about'), href: '#about', id: 'about', isExternal: false },
-    { name: t('nav.skills'), href: '#skills', id: 'skills', isExternal: false },
-    { name: t('nav.projects'), href: '#projects', id: 'projects', isExternal: false },
-    { name: 'Blog', href: '/blog', id: 'blog', isExternal: true },
-    { name: t('nav.contact'), href: '#contact', id: 'contact', isExternal: false },
+  const navItems = [
+    { name: t('nav.home'), href: '#home', id: 'home' },
+    { name: t('nav.about'), href: '#about', id: 'about' },
+    { name: t('nav.skills'), href: '#skills', id: 'skills' },
+    { name: t('nav.projects'), href: '#projects', id: 'projects' },
+    { name: t('nav.blog'), href: '#blog', id: 'blog' },
+    { name: t('nav.contact'), href: '#contact', id: 'contact' },
   ];
 
   const handleNavigation = (href: string, isExternal: boolean) => {
@@ -155,7 +152,7 @@ const Header = () => {
                     <span className="relative z-10">{item.name}</span>
                   </Link>
                 ) : (
-                  <button
+                <button
                     onClick={() => handleNavigation(item.href, item.isExternal)}
                     className="relative px-4 py-2 rounded-lg font-medium transition-all duration-300"
                     style={{
@@ -173,10 +170,10 @@ const Header = () => {
                         e.currentTarget.style.color = 'var(--text-secondary)';
                       }
                     }}
-                  >
-                    {activeSection === item.id && (
-                      <motion.div
-                        layoutId="activeSection"
+                >
+                  {activeSection === item.id && (
+                    <motion.div
+                      layoutId="activeSection"
                         className="absolute inset-0 rounded-lg"
                         style={{
                           backgroundColor: 'var(--color-primary-500)',
@@ -184,11 +181,11 @@ const Header = () => {
                           border: `1px solid var(--color-primary-500)`,
                           borderOpacity: 0.2
                         }}
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <span className="relative z-10">{item.name}</span>
-                  </button>
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.name}</span>
+                </button>
                 )}
               </motion.div>
             ))}
@@ -333,8 +330,8 @@ const Header = () => {
                             e.currentTarget.style.backgroundColor = 'transparent';
                           }
                         }}
-                      >
-                        {item.name}
+                  >
+                    {item.name}
                       </button>
                     )}
                   </motion.div>

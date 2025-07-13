@@ -1,11 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { User, Heart, Target, Award } from 'lucide-react';
+import { User, Heart, Target, Award, MapPin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AboutSection = () => {
+  const { t } = useLanguage();
   return (
-    <section id="about" className="section-padding bg-gradient-to-b from-black to-gray-900 relative overflow-hidden scroll-mt-20">
+    <section id="about" className="section-padding relative overflow-hidden scroll-mt-20" style={{ background: 'linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary))' }}>
       {/* Background Elements */}
       <div className="absolute inset-0 bg-noise opacity-5" />
       
@@ -18,10 +20,10 @@ const AboutSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-6xl font-bold font-display mb-6">
-            <span className="text-gradient">Sobre</span> <span className="text-white">Mim</span>
+            <span className="text-gradient">{t('about.title').split(' ')[0]}</span> <span style={{ color: 'var(--text-primary)' }}>{t('about.title').split(' ')[1]}</span>
           </h2>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Desenvolvedor apaixonado por criar soluções que fazem a diferença
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' }}>
+            {t('about.subtitle')}
           </p>
         </motion.div>
 
@@ -34,23 +36,16 @@ const AboutSection = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <p className="text-gray-300 text-lg leading-relaxed">
-              Sou um <span className="text-primary-400 font-semibold">Desenvolvedor Full Stack</span> apaixonado 
-              por transformar ideias em realidade digital. Com mais de 5 anos de experiência, especializo-me 
-              em criar aplicações completas e escaláveis.
-            </p>
-
-            <p className="text-gray-300 text-lg leading-relaxed">
-              Minha jornada começou com curiosidade e evoluiu para uma paixão genuína por resolver problemas 
-              complexos usando tecnologia. Trabalho com as mais modernas tecnologias do mercado.
+            <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              {t('about.description')}
             </p>
 
             <div className="grid grid-cols-2 gap-4 mt-8">
               {[
-                { icon: Heart, title: "Paixão", desc: "Por tecnologia e inovação" },
-                { icon: Target, title: "Foco", desc: "Em resultados excepcionais" },
-                { icon: Award, title: "Qualidade", desc: "Em cada linha de código" },
-                { icon: User, title: "Experiência", desc: "Do usuário em primeiro lugar" }
+                { icon: Heart, title: t('about.passion'), desc: t('about.passion.desc') },
+                { icon: Target, title: t('about.focus'), desc: t('about.focus.desc') },
+                { icon: Award, title: t('about.quality'), desc: t('about.quality.desc') },
+                { icon: User, title: t('about.experience.user'), desc: t('about.experience.user.desc') }
               ].map((item, index) => (
                 <motion.div
                   key={item.title}
@@ -60,9 +55,9 @@ const AboutSection = () => {
                   viewport={{ once: true }}
                   className="card card-hover p-4"
                 >
-                  <item.icon className="w-8 h-8 text-primary-400 mb-3" />
-                  <h3 className="font-semibold text-white mb-1">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                  <item.icon className="w-8 h-8 mb-3" style={{ color: 'var(--color-primary-500)' }} />
+                  <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>{item.title}</h3>
+                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -77,17 +72,23 @@ const AboutSection = () => {
             className="relative"
           >
             <div className="card p-8 text-center">
-              <div className="w-32 h-32 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl font-bold text-white">
+              <div className="w-32 h-32 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl font-bold text-white"
+                   style={{
+                     background: `linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600))`
+                   }}>
                 A
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Abson Santos</h3>
-              <p className="text-primary-400 font-medium mb-4">Full Stack Developer</p>
-              <div className="space-y-2 text-sm text-gray-400">
+              <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Abson Santos</h3>
+              <p className="font-medium mb-4" style={{ color: 'var(--color-primary-500)' }}>Full Stack Developer</p>
+              <div className="space-y-2 text-sm" style={{ color: 'var(--text-muted)' }}>
                 <div className="flex items-center justify-center">
                   <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                  Disponível para projetos
+                  {t('about.available')}
                 </div>
-                <div>📍 Brasil</div>
+                <div className="flex items-center justify-center">
+                  <MapPin className="w-4 h-4 mr-1" style={{ color: 'var(--color-primary-500)' }} />
+                  {t('about.location')}
+                </div>
               </div>
             </div>
           </motion.div>

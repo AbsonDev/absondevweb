@@ -1,66 +1,68 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SkillsSection = () => {
+  const { t } = useLanguage();
   const skillCategories = [
     {
-      title: 'Frontend & Mobile',
+      title: t('skills.frontend'),
       skills: [
-        { name: 'Flutter', icon: '📱' },
-        { name: 'Angular', icon: '⚡' },
-        { name: 'Next.js', icon: '⚛️' },
-        { name: 'TypeScript', icon: '🔷' },
-        { name: 'React', icon: '⚛️' },
-        { name: 'Dart', icon: '🎯' },
+        { name: 'Flutter', logo: 'https://cdn.simpleicons.org/flutter' },
+        { name: 'Angular', logo: 'https://cdn.simpleicons.org/angular' },
+        { name: 'Next.js', logo: 'https://cdn.simpleicons.org/nextdotjs' },
+        { name: 'TypeScript', logo: 'https://cdn.simpleicons.org/typescript' },
+        { name: 'React', logo: 'https://cdn.simpleicons.org/react' },
+        { name: 'Dart', logo: 'https://cdn.simpleicons.org/dart' },
       ]
     },
     {
-      title: 'Backend & Cloud',
+      title: t('skills.backend'),
       skills: [
-        { name: '.NET Core', icon: '💎' },
-        { name: 'Azure', icon: '☁️' },
-        { name: 'C#', icon: '🔧' },
-        { name: 'Node.js', icon: '🟢' },
-        { name: 'Docker', icon: '🐳' },
-        { name: 'Kubernetes', icon: '⚙️' },
+        { name: '.NET Core', logo: 'https://cdn.simpleicons.org/dotnet' },
+        { name: 'Azure', logo: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original.svg' },
+        { name: 'C#', logo: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg' },
+        { name: 'Node.js', logo: 'https://cdn.simpleicons.org/nodedotjs' },
+        { name: 'Docker', logo: 'https://cdn.simpleicons.org/docker' },
+        { name: 'Kubernetes', logo: 'https://cdn.simpleicons.org/kubernetes' },
       ]
     },
     {
-      title: 'Database & Tools',
+      title: t('skills.database'),
       skills: [
-        { name: 'PostgreSQL', icon: '🐘' },
-        { name: 'Firebase', icon: '🔥' },
-        { name: 'GitHub', icon: '🐙' },
-        { name: 'Git', icon: '📝' },
-        { name: 'REST APIs', icon: '🔗' },
-        { name: 'GraphQL', icon: '📊' },
+        { name: 'PostgreSQL', logo: 'https://cdn.simpleicons.org/postgresql' },
+        { name: 'Firebase', logo: 'https://cdn.simpleicons.org/firebase' },
+        { name: 'GitHub', logo: 'https://cdn.simpleicons.org/github' },
+        { name: 'Git', logo: 'https://cdn.simpleicons.org/git' },
+        { name: 'REST APIs', logo: 'https://cdn.simpleicons.org/fastapi' },
+        { name: 'GraphQL', logo: 'https://cdn.simpleicons.org/graphql' },
       ]
     },
     {
-      title: 'Metodologias & Práticas',
+      title: t('skills.methodologies'),
       skills: [
-        { name: 'SOLID', icon: '🏗️' },
-        { name: 'TDD', icon: '🧪' },
-        { name: 'Clean Architecture', icon: '🏛️' },
-        { name: 'Agile/Scrum', icon: '🔄' },
-        { name: 'CI/CD', icon: '🚀' },
-        { name: 'DevOps', icon: '⚡' },
+        { name: 'SOLID', logo: 'https://cdn.simpleicons.org/solid' },
+        { name: 'TDD', logo: 'https://cdn.simpleicons.org/testinglibrary' },
+        { name: 'Clean Architecture', logo: 'https://cdn.simpleicons.org/blueprint' },
+        { name: 'Agile/Scrum', logo: 'https://cdn.simpleicons.org/atlassian' },
+        { name: 'CI/CD', logo: 'https://cdn.simpleicons.org/githubactions' },
+        { name: 'DevOps', logo: 'https://cdn.simpleicons.org/jenkins' },
       ]
     },
     {
-      title: 'AI Development Tools',
+      title: t('skills.ai'),
       skills: [
-        { name: 'Cursor AI', icon: '🤖' },
-        { name: 'Claude Code', icon: '🧠' },
-        { name: 'GitHub Copilot', icon: '🚁' },
-        { name: 'ChatGPT', icon: '💬' },
+        { name: 'Cursor AI', logo: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg' },
+        { name: 'Claude Code', logo: 'https://cdn.simpleicons.org/anthropic' },
+        { name: 'GitHub Copilot', logo: 'https://cdn.simpleicons.org/githubcopilot' },
+        { name: 'ChatGPT', logo: 'https://cdn.simpleicons.org/openai' },
       ]
     }
   ];
 
   return (
-    <section id="skills" className="section-padding bg-gray-900 relative overflow-hidden scroll-mt-20">
+    <section id="skills" className="section-padding relative overflow-hidden scroll-mt-20">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -70,7 +72,7 @@ const SkillsSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-6xl font-bold font-display mb-6">
-            <span className="text-white">Minhas</span> <span className="text-gradient">Skills</span>
+            <span style={{ color: 'var(--text-primary)' }}>{t('skills.title').split(' ')[0]}</span> <span className="text-gradient">{t('skills.title').split(' ')[1]}</span>
           </h2>
         </motion.div>
 
@@ -99,13 +101,25 @@ const SkillsSection = () => {
                       delay: categoryIndex * 0.2 + skillIndex * 0.1 
                     }}
                     viewport={{ once: true }}
-                    className="flex flex-col items-center p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300 group"
+                    className="flex flex-col items-center p-3 rounded-lg transition-all duration-300 group"
+                    style={{
+                      backgroundColor: 'var(--bg-glass-dark)',
+                      border: `1px solid var(--border-light)`
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-glass)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-glass-dark)';
+                    }}
                     whileHover={{ scale: 1.05, y: -2 }}
                   >
-                    <span className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">
-                      {skill.icon}
-                    </span>
-                    <span className="text-sm font-medium text-gray-300 text-center leading-tight">
+                    <img 
+                      src={skill.logo} 
+                      alt={skill.name}
+                      className="w-8 h-8 mb-2 group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <span className="text-sm font-medium text-center leading-tight" style={{ color: 'var(--text-secondary)' }}>
                       {skill.name}
                     </span>
                   </motion.div>

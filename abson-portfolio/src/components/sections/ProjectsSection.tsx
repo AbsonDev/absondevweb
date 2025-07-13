@@ -2,31 +2,33 @@
 
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ProjectsSection = () => {
+  const { t } = useLanguage();
   const projects = [
     {
-      title: 'EstoqueMax',
-      description: 'Sistema de gestão de estoque com AI e realtime',
+      title: t('projects.estoqueMax.title'),
+      description: t('projects.estoqueMax.desc'),
       tech: ['Flutter', '.NET Core', 'Azure'],
-      image: '🏪',
+      image: 'https://cdn.simpleicons.org/flutter',
     },
     {
-      title: 'Portfolio Dinâmico',
-      description: 'Portfolio moderno com animações avançadas',
+      title: t('projects.portfolio.title'),
+      description: t('projects.portfolio.desc'),
       tech: ['Next.js', 'Framer Motion', 'Tailwind'],
-      image: '💼',
+      image: 'https://cdn.simpleicons.org/nextdotjs',
     },
     {
-      title: 'App Mobile',
-      description: 'Aplicativo cross-platform de alta performance',
+      title: t('projects.mobile.title'),
+      description: t('projects.mobile.desc'),
       tech: ['Flutter', 'Firebase', 'BLoC'],
-      image: '📱',
+      image: 'https://cdn.simpleicons.org/flutter',
     },
   ];
 
   return (
-    <section id="projects" className="section-padding bg-black relative overflow-hidden scroll-mt-20">
+    <section id="projects" className="section-padding relative overflow-hidden scroll-mt-20">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -36,7 +38,7 @@ const ProjectsSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl lg:text-6xl font-bold font-display mb-6">
-            <span className="text-white">Meus</span> <span className="text-gradient">Projetos</span>
+            <span style={{ color: 'var(--text-primary)' }}>{t('projects.title').split(' ')[0]}</span> <span className="text-gradient">{t('projects.title').split(' ')[1]}</span>
           </h2>
         </motion.div>
 
@@ -50,12 +52,18 @@ const ProjectsSection = () => {
               viewport={{ once: true }}
               className="card card-hover group"
             >
-              <div className="text-6xl mb-4">{project.image}</div>
-              <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-              <p className="text-gray-400 mb-4">{project.description}</p>
+              <div className="mb-4 flex justify-center">
+                <img 
+                  src={project.image} 
+                  alt={project.title}
+                  className="w-16 h-16"
+                />
+              </div>
+              <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{project.title}</h3>
+              <p className="mb-4" style={{ color: 'var(--text-muted)' }}>{project.description}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tech.map((tech) => (
-                  <span key={tech} className="glass px-2 py-1 rounded text-xs text-primary-400">
+                  <span key={tech} className="glass px-2 py-1 rounded text-xs" style={{ color: 'var(--color-primary-500)' }}>
                     {tech}
                   </span>
                 ))}
@@ -63,11 +71,11 @@ const ProjectsSection = () => {
               <div className="flex space-x-2">
                 <button className="btn-ghost flex-1">
                   <Github className="w-4 h-4 mr-2" />
-                  Código
+                  {t('projects.code')}
                 </button>
                 <button className="btn-ghost flex-1">
                   <ExternalLink className="w-4 h-4 mr-2" />
-                  Demo
+                  {t('projects.demo')}
                 </button>
               </div>
             </motion.div>
