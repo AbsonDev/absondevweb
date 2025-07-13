@@ -59,6 +59,29 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen">
+      {/* Breadcrumbs */}
+      <div className="section-container pt-8 pb-4">
+        <nav className="flex items-center gap-2 text-sm">
+          <Link 
+            href="/"
+            className="font-medium transition-colors duration-300"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary-500)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }}
+          >
+            Home
+          </Link>
+          <span style={{ color: 'var(--text-muted)' }}>/</span>
+          <span style={{ color: 'var(--color-primary-500)' }} className="font-medium">
+            Blog
+          </span>
+        </nav>
+      </div>
+
       {/* Hero Section */}
       <section className="section-padding relative overflow-hidden">
         <div className="section-container">

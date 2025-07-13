@@ -4,14 +4,18 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Code, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSelector from './LanguageSelector';
 
 const Header = () => {
   const { t } = useLanguage();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  
+  const isOnBlogPage = pathname?.startsWith('/blog');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +43,11 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  // Navegação adaptativa baseada na página atual
+  const navItems = isOnBlogPage ? [
+    { name: t('nav.home'), href: '/', id: 'home', isExternal: true },
+    { name: 'Blog', href: '/blog', id: 'blog', isExternal: true, isActive: true },
+  ] : [
     { name: t('nav.home'), href: '#home', id: 'home', isExternal: false },
     { name: t('nav.about'), href: '#about', id: 'about', isExternal: false },
     { name: t('nav.skills'), href: '#skills', id: 'skills', isExternal: false },
@@ -92,8 +100,8 @@ const Header = () => {
             className="flex items-center"
           >
             <Link 
-              href="#home" 
-              onClick={() => scrollToSection('#home')}
+              href={isOnBlogPage ? "/" : "#home"} 
+              onClick={isOnBlogPage ? undefined : () => handleNavigation('#home', false)}
               className="text-xl lg:text-2xl font-bold font-display"
             >
               <span style={{ color: 'var(--text-primary)' }}>Abson</span>
@@ -116,15 +124,34 @@ const Header = () => {
                     onClick={() => handleNavigation(item.href, item.isExternal)}
                     className="relative px-4 py-2 rounded-lg font-medium transition-all duration-300 block"
                     style={{
-                      color: 'var(--text-secondary)'
+                      color: (item as any).isActive 
+                        ? 'var(--color-primary-500)' 
+                        : 'var(--text-secondary)'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = 'var(--text-primary)';
+                      if (!(item as any).isActive) {
+                        e.currentTarget.style.color = 'var(--text-primary)';
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'var(--text-secondary)';
+                      if (!(item as any).isActive) {
+                        e.currentTarget.style.color = 'var(--text-secondary)';
+                      }
                     }}
                   >
+                    {(item as any).isActive && (
+                      <motion.div
+                        layoutId="activeSection"
+                        className="absolute inset-0 rounded-lg"
+                        style={{
+                          backgroundColor: 'var(--color-primary-500)',
+                          opacity: 0.1,
+                          border: `1px solid var(--color-primary-500)`,
+                          borderOpacity: 0.2
+                        }}
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
                     <span className="relative z-10">{item.name}</span>
                   </Link>
                 ) : (
@@ -258,15 +285,25 @@ const Header = () => {
                         onClick={() => handleNavigation(item.href, item.isExternal)}
                         className="block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-300"
                         style={{
-                          color: 'var(--text-secondary)'
+                          color: (item as any).isActive 
+                            ? 'var(--color-primary-500)' 
+                            : 'var(--text-secondary)',
+                          backgroundColor: (item as any).isActive 
+                            ? 'var(--color-primary-500)' 
+                            : 'transparent',
+                          backgroundOpacity: (item as any).isActive ? 0.1 : 0
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.color = 'var(--text-primary)';
-                          e.currentTarget.style.backgroundColor = 'var(--bg-glass)';
+                          if (!(item as any).isActive) {
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.backgroundColor = 'var(--bg-glass)';
+                          }
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.color = 'var(--text-secondary)';
-                          e.currentTarget.style.backgroundColor = 'transparent';
+                          if (!(item as any).isActive) {
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
                         }}
                       >
                         {item.name}

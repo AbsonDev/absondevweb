@@ -171,11 +171,45 @@ export default function BlogPostPage({ params }: PageProps) {
         }}
       />
 
-      {/* Back to Blog */}
+      {/* Breadcrumbs */}
       <div className="section-container pt-8 pb-4">
+        <nav className="flex items-center gap-2 text-sm">
+          <Link 
+            href="/"
+            className="font-medium transition-colors duration-300"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary-500)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }}
+          >
+            Home
+          </Link>
+          <span style={{ color: 'var(--text-muted)' }}>/</span>
+          <Link 
+            href="/blog"
+            className="font-medium transition-colors duration-300"
+            style={{ color: 'var(--text-muted)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary-500)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }}
+          >
+            Blog
+          </Link>
+          <span style={{ color: 'var(--text-muted)' }}>/</span>
+          <span style={{ color: 'var(--color-primary-500)' }} className="font-medium">
+            Artigo
+          </span>
+        </nav>
+        
         <Link 
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 hover:gap-3"
+          className="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 hover:gap-3 mt-4"
           style={{ color: 'var(--color-primary-500)' }}
         >
           <ArrowLeft className="w-4 h-4" />
