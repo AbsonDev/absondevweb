@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Share2, BookOpen, Tag, Eye, Heart, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -9,14 +9,15 @@ import { getBlogPostBySlug, getRelatedBlogPosts, getAllBlogPosts } from '@/data/
 import type { BlogPost } from '@/data/types/blog';
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default function BlogPostPage({ params }: PageProps) {
   const [readingProgress, setReadingProgress] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(0);
 
-  const post = getBlogPostBySlug(params.slug);
+  const resolvedParams = use(params);
+  const post = getBlogPostBySlug(resolvedParams.slug);
   
   if (!post) {
     notFound();
