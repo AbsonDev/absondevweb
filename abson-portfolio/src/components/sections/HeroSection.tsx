@@ -1,111 +1,53 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Download, Play, Sparkles, Code2, Rocket } from 'lucide-react';
+import { ChevronDown, Download, Play, Sparkles, Rocket } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { t } = useLanguage();
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  
+  // Typing animation for specialties
+  const specialties = [
+    'AngularDeveloper',
+    'FlutterDeveloper', 
+    'DotNetDeveloper',
+    'FullStackDeveloper',
+    'ReactDeveloper',
+    'NextJSDeveloper'
+  ];
+  
+  const [currentSpecialty, setCurrentSpecialty] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(150);
 
+  // Typing effect
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const handleTyping = () => {
+      const currentText = specialties[currentSpecialty];
+      
+      if (isDeleting) {
+        setDisplayText(currentText.substring(0, displayText.length - 1));
+        setTypingSpeed(75);
+      } else {
+        setDisplayText(currentText.substring(0, displayText.length + 1));
+        setTypingSpeed(150);
+      }
+      
+      if (!isDeleting && displayText === currentText) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && displayText === '') {
+        setIsDeleting(false);
+        setCurrentSpecialty((prev) => (prev + 1) % specialties.length);
+      }
     };
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Particle system
-    const particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      opacity: number;
-      hue: number;
-    }> = [];
-
-    const createParticle = () => {
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2,
-        hue: Math.random() * 60 + 10, // Orange/yellow hues
-      };
-    };
-
-    // Initialize particles
-    for (let i = 0; i < 50; i++) {
-      particles.push(createParticle());
-    }
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Update and draw particles
-      particles.forEach((particle, index) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        // Wrap around screen
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
-
-        // Draw particle
-        ctx.save();
-        ctx.globalAlpha = particle.opacity;
-        ctx.fillStyle = `hsl(${particle.hue}, 100%, 60%)`;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // Draw connections
-        particles.forEach((otherParticle, otherIndex) => {
-          if (index !== otherIndex) {
-            const dx = particle.x - otherParticle.x;
-            const dy = particle.y - otherParticle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 100) {
-              const opacity = (100 - distance) / 100 * 0.1;
-              ctx.save();
-              ctx.globalAlpha = opacity;
-              ctx.strokeStyle = `hsl(${particle.hue}, 100%, 60%)`;
-              ctx.lineWidth = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(particle.x, particle.y);
-              ctx.lineTo(otherParticle.x, otherParticle.y);
-              ctx.stroke();
-              ctx.restore();
-            }
-          }
-        });
-      });
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-    };
-  }, []);
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, currentSpecialty, typingSpeed, specialties]);
 
   // Hide scroll indicator when user starts scrolling (adjusted for mobile)
   useEffect(() => {
@@ -142,29 +84,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-20">
-      {/* Animated Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 opacity-30"
-        style={{ pointerEvents: 'none' }}
-      />
-
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 grid-pattern opacity-20" />
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-transparent to-purple-900/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-      {/* Floating Shapes */}
-      <div className="floating-shapes">
-        <div className="floating-shape" />
-        <div className="floating-shape" />
-        <div className="floating-shape" />
-        <div className="floating-shape" />
-        <div className="floating-shape" />
-      </div>
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
 
       {/* Main Content */}
       <div className="section-container relative z-10">
@@ -180,65 +100,63 @@ const HeroSection = () => {
             className="inline-flex items-center space-x-2 glass px-4 py-2 rounded-full mb-8"
           >
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-sm text-gray-300">Disponível para projetos</span>
+            <span className="text-sm text-gray-300">{t('hero.available')}</span>
             <Sparkles className="w-4 h-4 text-primary-400" />
           </motion.div>
 
           {/* Main Heading */}
           <motion.h1
             variants={textVariants}
-            className="text-4xl md:text-6xl lg:text-8xl font-bold font-display mb-6"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-display mb-6 whitespace-nowrap"
+            style={{ minWidth: 'fit-content' }}
           >
-            <motion.span
-              className="block text-white text-shadow-lg"
-              animate={{ 
-                textShadow: [
-                  "0 0 20px rgba(249, 115, 22, 0.5)",
-                  "0 0 40px rgba(249, 115, 22, 0.8)",
-                  "0 0 20px rgba(249, 115, 22, 0.5)"
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <span style={{ color: 'var(--text-primary)' }}>
               Abson
-            </motion.span>
+            </span>
+            <span style={{ color: 'var(--color-primary-500)' }}>
+              .
+            </span>
             <motion.span
-              className="block text-gradient bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 bg-clip-text text-transparent"
-              animate={{ 
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-              style={{ backgroundSize: "200% 200%" }}
+              style={{ color: 'var(--color-primary-500)' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
             >
-              Developer
+              {displayText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                className="inline-block ml-1"
+                style={{ color: 'var(--color-primary-500)' }}
+              >
+                |
+              </motion.span>
             </motion.span>
           </motion.h1>
 
           {/* Subtitle */}
           <motion.h2
             variants={textVariants}
-            className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-medium mb-8 max-w-4xl mx-auto"
+            className="text-xl md:text-2xl lg:text-3xl font-medium mb-8 max-w-4xl mx-auto"
+            style={{ color: 'var(--text-secondary)' }}
           >
-            Desenvolvedor{' '}
+            {t('hero.greeting')}{' '}
             <motion.span
               className="text-gradient-purple font-semibold"
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              Full Stack
-            </motion.span>{' '}
-            especializado em criar experiências digitais extraordinárias
+              {t('hero.name')}
+            </motion.span>
           </motion.h2>
 
           {/* Description */}
           <motion.p
             variants={textVariants}
-            className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed"
+            className="text-lg md:text-xl max-w-3xl mx-auto mb-12 leading-relaxed"
+            style={{ color: 'var(--text-muted)' }}
           >
-            Transformo ideias em{' '}
-            <span className="text-primary-400 font-medium">soluções digitais inovadoras</span> usando
-            as tecnologias mais modernas do mercado. Do mobile à nuvem, construo experiências
-            que impressionam e resultados que importam.
+            {t('hero.subtitle')}
           </motion.p>
 
           {/* Action Buttons */}
@@ -253,7 +171,7 @@ const HeroSection = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Play className="w-5 h-5 mr-2" />
-              <span>Ver Projetos</span>
+              <span>{t('hero.cta')}</span>
               <motion.div
                 className="ml-2"
                 animate={{ x: [0, 4, 0] }}
@@ -280,12 +198,12 @@ const HeroSection = () => {
             className="flex flex-wrap justify-center gap-4 mb-16"
           >
             {[
-              { name: 'Flutter', icon: '📱' },
-              { name: 'Angular', icon: '⚡' },
-              { name: '.NET', icon: '💎' },
-              { name: 'Next.js', icon: '⚛️' },
-              { name: 'Azure', icon: '☁️' },
-              { name: 'TypeScript', icon: '🔷' }
+              { name: 'Flutter', logo: 'https://cdn.simpleicons.org/flutter' },
+              { name: 'Angular', logo: 'https://cdn.simpleicons.org/angular' },
+              { name: '.NET', logo: 'https://cdn.simpleicons.org/dotnet' },
+              { name: 'Next.js', logo: 'https://cdn.simpleicons.org/nextdotjs' },
+              { name: 'Azure', logo: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original.svg' },
+              { name: 'TypeScript', logo: 'https://cdn.simpleicons.org/typescript' }
             ].map((tech, index) => (
               <motion.div
                 key={tech.name}
@@ -295,8 +213,12 @@ const HeroSection = () => {
                 transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
                 whileHover={{ scale: 1.1, y: -5 }}
               >
-                <span className="text-2xl mr-2">{tech.icon}</span>
-                <span className="text-gray-300 font-medium">{tech.name}</span>
+                <img 
+                  src={tech.logo} 
+                  alt={tech.name}
+                  className="w-6 h-6 mr-2"
+                />
+                <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>{tech.name}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -307,9 +229,9 @@ const HeroSection = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto mb-24"
           >
             {[
-              { number: "5+", label: "Anos de Experiência" },
-              { number: "50+", label: "Projetos Concluídos" },
-              { number: "15+", label: "Clientes Satisfeitos" }
+              { number: "5+", label: t('about.experience') },
+              { number: "50+", label: t('about.projects') },
+              { number: "15+", label: t('about.clients') }
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -325,7 +247,7 @@ const HeroSection = () => {
                 >
                   {stat.number}
                 </motion.div>
-                <div className="text-gray-400 text-sm">{stat.label}</div>
+                <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -361,9 +283,23 @@ const HeroSection = () => {
             />
             
             {/* Mouse Shape - Smaller */}
-            <div className="relative w-5 h-8 border border-primary-500/60 rounded-full flex justify-center items-start group-hover:border-primary-400 transition-all duration-300 bg-black/20 backdrop-blur-sm">
+            <div className="relative w-5 h-8 rounded-full flex justify-center items-start transition-all duration-300 backdrop-blur-sm"
+                 style={{
+                   border: `1px solid var(--color-primary-500)`,
+                   borderOpacity: 0.6,
+                   backgroundColor: 'var(--bg-glass-dark)'
+                 }}
+                 onMouseEnter={(e) => {
+                   e.currentTarget.style.borderColor = 'var(--color-primary-400)';
+                 }}
+                 onMouseLeave={(e) => {
+                   e.currentTarget.style.borderColor = 'var(--color-primary-500)';
+                 }}>
               <motion.div
-                className="w-1 h-2 bg-gradient-to-b from-primary-400 to-primary-600 rounded-full mt-1"
+                className="w-1 h-2 rounded-full mt-1"
+                style={{
+                  background: `linear-gradient(to bottom, var(--color-primary-400), var(--color-primary-600))`
+                }}
                 animate={{ 
                   y: [0, 10, 0], 
                   opacity: [1, 0.4, 1]
@@ -378,29 +314,18 @@ const HeroSection = () => {
             animate={{ y: [0, 4, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <ChevronDown className="w-3 h-3 text-primary-500 group-hover:text-primary-400 transition-colors duration-300" />
+            <ChevronDown className="w-3 h-3 transition-colors duration-300" 
+                         style={{ color: 'var(--color-primary-500)' }}
+                         onMouseEnter={(e) => {
+                           e.currentTarget.style.color = 'var(--color-primary-400)';
+                         }}
+                         onMouseLeave={(e) => {
+                           e.currentTarget.style.color = 'var(--color-primary-500)';
+                         }} />
           </motion.div>
         </motion.button>
       </motion.div>
 
-      {/* Code Rain Effect */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-primary-500 font-mono text-xs"
-            initial={{ y: -100, x: `${i * 10}%` }}
-            animate={{ y: "100vh" }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-          >
-            <Code2 className="w-4 h-4" />
-          </motion.div>
-        ))}
-      </div>
     </section>
   );
 };
