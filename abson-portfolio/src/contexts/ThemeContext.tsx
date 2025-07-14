@@ -110,13 +110,33 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [mode, setMode] = useState<ThemeMode>('dark');
   const [primaryColor, setPrimaryColor] = useState<PrimaryColor>('orange');
 
-  // Load saved preferences
+  // Load saved preferences with system preference fallback
   useEffect(() => {
     const savedMode = localStorage.getItem('theme-mode') as ThemeMode;
     const savedColor = localStorage.getItem('theme-color') as PrimaryColor;
     
-    if (savedMode) setMode(savedMode);
+    if (savedMode) {
+      setMode(savedMode);
+    } else {
+      // Auto-detect system preference
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setMode(systemPrefersDark ? 'dark' : 'light');
+    }
+    
     if (savedColor) setPrimaryColor(savedColor);
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      const savedMode = localStorage.getItem('theme-mode');
+      // Only auto-update if user hasn't manually set a preference
+      if (!savedMode) {
+        setMode(e.matches ? 'dark' : 'light');
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, []);
 
   // Apply theme to document

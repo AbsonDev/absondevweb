@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Share2, BookOpen, Tag, Eye, Heart, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { getBlogPostBySlug, getRelatedBlogPosts, getAllBlogPosts } from '@/data/blog-posts';
 import type { BlogPost } from '@/data/types/blog';
 
@@ -76,88 +79,128 @@ export default function BlogPostPage({ params }: PageProps) {
     }
   };
 
-  const renderContent = (content: string) => {
-    // Simple markdown-like rendering
-    return content
-      .split('\n\n')
-      .map((paragraph, index) => {
-        if (paragraph.startsWith('# ')) {
-          return (
-            <h1 
-              key={index} 
-              className="text-3xl lg:text-4xl font-bold mb-6 mt-8"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              {paragraph.replace('# ', '')}
-            </h1>
-          );
-        }
-        
-        if (paragraph.startsWith('## ')) {
-          return (
-            <h2 
-              key={index} 
-              className="text-2xl lg:text-3xl font-bold mb-4 mt-6"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              {paragraph.replace('## ', '')}
-            </h2>
-          );
-        }
-        
-        if (paragraph.startsWith('### ')) {
-          return (
-            <h3 
-              key={index} 
-              className="text-xl lg:text-2xl font-bold mb-3 mt-5"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              {paragraph.replace('### ', '')}
-            </h3>
-          );
-        }
-        
-        if (paragraph.startsWith('```')) {
-          const codeContent = paragraph.replace(/```[\w]*\n?/, '').replace(/\n?```$/, '');
-          return (
-            <pre 
-              key={index} 
-              className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6 text-sm"
-            >
-              <code>{codeContent}</code>
-            </pre>
-          );
-        }
-        
-        if (paragraph.startsWith('`') && paragraph.endsWith('`')) {
-          return (
-            <code 
-              key={index}
-              className="px-2 py-1 rounded text-sm"
-              style={{ 
-                backgroundColor: 'var(--bg-secondary)', 
-                color: 'var(--text-primary)' 
-              }}
-            >
-              {paragraph.slice(1, -1)}
-            </code>
-          );
-        }
-        
+  // Componentes customizados para o ReactMarkdown
+  const markdownComponents = {
+    h1: ({ children }: { children: React.ReactNode }) => (
+      <h1 className="text-3xl lg:text-4xl font-bold mb-6 mt-8" style={{ color: 'var(--text-primary)' }}>
+        {children}
+      </h1>
+    ),
+    h2: ({ children }: { children: React.ReactNode }) => (
+      <h2 className="text-2xl lg:text-3xl font-bold mb-4 mt-6" style={{ color: 'var(--text-primary)' }}>
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: { children: React.ReactNode }) => (
+      <h3 className="text-xl lg:text-2xl font-bold mb-3 mt-5" style={{ color: 'var(--text-primary)' }}>
+        {children}
+      </h3>
+    ),
+    h4: ({ children }: { children: React.ReactNode }) => (
+      <h4 className="text-lg lg:text-xl font-bold mb-2 mt-4" style={{ color: 'var(--text-primary)' }}>
+        {children}
+      </h4>
+    ),
+    p: ({ children }: { children: React.ReactNode }) => (
+      <p className="mb-4 leading-relaxed text-lg" style={{ color: 'var(--text-secondary)' }}>
+        {children}
+      </p>
+    ),
+    ul: ({ children }: { children: React.ReactNode }) => (
+      <ul className="mb-4 pl-6 space-y-2" style={{ color: 'var(--text-secondary)' }}>
+        {children}
+      </ul>
+    ),
+    ol: ({ children }: { children: React.ReactNode }) => (
+      <ol className="mb-4 pl-6 space-y-2" style={{ color: 'var(--text-secondary)' }}>
+        {children}
+      </ol>
+    ),
+    li: ({ children }: { children: React.ReactNode }) => (
+      <li className="text-lg leading-relaxed">
+        {children}
+      </li>
+    ),
+    blockquote: ({ children }: { children: React.ReactNode }) => (
+      <blockquote 
+        className="border-l-4 pl-4 my-6 italic"
+        style={{ 
+          borderColor: 'var(--accent-color)', 
+          color: 'var(--text-muted)',
+          backgroundColor: 'var(--bg-secondary)'
+        }}
+      >
+        {children}
+      </blockquote>
+    ),
+    code: ({ children, className }: { children: React.ReactNode; className?: string }) => {
+      const isInline = !className;
+      if (isInline) {
         return (
-          <p 
-            key={index} 
-            className="mb-4 leading-relaxed text-lg"
-            style={{ color: 'var(--text-secondary)' }}
-            dangerouslySetInnerHTML={{
-              __html: paragraph
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded text-sm bg-gray-200 dark:bg-gray-800">$1</code>')
+          <code 
+            className="px-2 py-1 rounded text-sm font-mono"
+            style={{ 
+              backgroundColor: 'var(--bg-secondary)', 
+              color: 'var(--accent-color)' 
             }}
-          />
+          >
+            {children}
+          </code>
         );
-      });
+      }
+      return <code className={className}>{children}</code>;
+    },
+    pre: ({ children }: { children: React.ReactNode }) => (
+      <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-6 text-sm font-mono">
+        {children}
+      </pre>
+    ),
+    a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
+      <a 
+        href={href}
+        className="font-medium hover:underline transition-colors duration-200"
+        style={{ color: 'var(--accent-color)' }}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    ),
+    strong: ({ children }: { children: React.ReactNode }) => (
+      <strong style={{ color: 'var(--text-primary)' }}>
+        {children}
+      </strong>
+    ),
+    table: ({ children }: { children: React.ReactNode }) => (
+      <div className="overflow-x-auto my-6">
+        <table className="min-w-full border-collapse" style={{ borderColor: 'var(--border-light)' }}>
+          {children}
+        </table>
+      </div>
+    ),
+    th: ({ children }: { children: React.ReactNode }) => (
+      <th 
+        className="px-4 py-2 text-left font-semibold border"
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          color: 'var(--text-primary)',
+          borderColor: 'var(--border-light)'
+        }}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children }: { children: React.ReactNode }) => (
+      <td 
+        className="px-4 py-2 border"
+        style={{ 
+          color: 'var(--text-secondary)',
+          borderColor: 'var(--border-light)'
+        }}
+      >
+        {children}
+      </td>
+    ),
   };
 
   return (
@@ -333,7 +376,13 @@ export default function BlogPostPage({ params }: PageProps) {
           className="max-w-4xl mx-auto"
         >
           <div className="prose prose-lg max-w-none">
-            {renderContent(post.content)}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+              components={markdownComponents}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
         </motion.div>
       </article>

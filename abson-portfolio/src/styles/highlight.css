@@ -1,0 +1,190 @@
+/* Estilos para syntax highlighting - Tema escuro personalizado */
+
+/* Container do código */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1rem;
+  background: #1a1a1a !important;
+  border-radius: 0.5rem;
+  color: #f8f8f2;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Elementos básicos */
+.hljs-comment,
+.hljs-quote {
+  color: #6272a4;
+  font-style: italic;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #ff5555;
+}
+
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #bd93f9;
+}
+
+.hljs-attribute {
+  color: #f1fa8c;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #50fa7b;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #8be9fd;
+  font-weight: bold;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #ff79c6;
+  font-weight: bold;
+}
+
+/* Linguagens específicas */
+
+/* JavaScript/TypeScript */
+.hljs-function,
+.hljs-class {
+  color: #8be9fd;
+}
+
+.hljs-keyword.hljs-function {
+  color: #ff79c6;
+}
+
+/* Python */
+.hljs-decorator {
+  color: #8be9fd;
+}
+
+/* CSS */
+.hljs-property {
+  color: #66d9ef;
+}
+
+.hljs-value {
+  color: #f1fa8c;
+}
+
+/* HTML */
+.hljs-tag .hljs-name {
+  color: #ff79c6;
+}
+
+.hljs-tag .hljs-attr {
+  color: #50fa7b;
+}
+
+/* JSON */
+.hljs-attr {
+  color: #8be9fd;
+}
+
+/* Bash/Shell */
+.hljs-built_in {
+  color: #50fa7b;
+}
+
+/* Destaque especial */
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* Code blocks inline */
+code:not(.hljs) {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ff9100 !important;
+  padding: 0.125rem 0.25rem !important;
+  border-radius: 0.25rem !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  font-size: 0.875em !important;
+}
+
+/* Melhorias responsivas */
+@media (max-width: 768px) {
+  .hljs {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Scrollbar customizada para code blocks */
+.hljs::-webkit-scrollbar {
+  height: 8px;
+}
+
+.hljs::-webkit-scrollbar-track {
+  background: #282a36;
+  border-radius: 4px;
+}
+
+.hljs::-webkit-scrollbar-thumb {
+  background: #44475a;
+  border-radius: 4px;
+}
+
+.hljs::-webkit-scrollbar-thumb:hover {
+  background: #6272a4;
+}
+
+/* Estilo para lista de linguagens nos code blocks */
+.hljs-meta .hljs-string {
+  color: #f1fa8c;
+}
+
+/* Garantir que o fundo seja sempre escuro */
+pre code.hljs {
+  background: #1a1a1a !important;
+}
+
+/* Melhorar contraste para acessibilidade */
+.hljs-title.class_,
+.hljs-title.function_ {
+  color: #8be9fd;
+  font-weight: 600;
+}
+
+/* Operadores */
+.hljs-operator {
+  color: #ff79c6;
+}
+
+/* Números e booleanos */
+.hljs-literal,
+.hljs-number {
+  color: #bd93f9;
+}
+
+/* Strings multiline */
+.hljs-string .hljs-subst {
+  color: #f8f8f2;
+}

@@ -3,27 +3,13 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
-
-const posts = [
-  {
-    title: 'Como ser produtivo como dev',
-    excerpt: 'Dicas práticas para aumentar sua produtividade no desenvolvimento de software.',
-    date: '2024-06-01',
-  },
-  {
-    title: 'Tendências em Frontend 2024',
-    excerpt: 'O que está em alta no desenvolvimento frontend este ano.',
-    date: '2024-05-20',
-  },
-  {
-    title: 'Boas práticas com TypeScript',
-    excerpt: 'Como escrever código mais seguro e escalável usando TypeScript.',
-    date: '2024-05-10',
-  },
-];
+import { getAllBlogPosts } from '@/data/blog-posts';
 
 const BlogSection = () => {
   const { t } = useLanguage();
+  
+  // Pega os 3 posts mais recentes
+  const recentPosts = getAllBlogPosts().slice(0, 3);
 
   return (
     <section id="blog" className="section-padding scroll-mt-20">
@@ -43,20 +29,47 @@ const BlogSection = () => {
           </p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-          {posts.map((post, idx) => (
+          {recentPosts.map((post, idx) => (
             <motion.article
-              key={post.title}
+              key={post.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
               className="card card-hover group"
             >
+              <div className="flex items-center gap-2 mb-2">
+                <span 
+                  className="px-2 py-1 text-xs font-medium rounded-md"
+                  style={{ 
+                    backgroundColor: post.category.color + '20',
+                    color: post.category.color 
+                  }}
+                >
+                  {post.category.name}
+                </span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {post.readTime}
+                </span>
+              </div>
               <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{post.title}</h3>
-              <p className="mb-2" style={{ color: 'var(--text-muted)' }}>{post.excerpt}</p>
-              <time className="text-xs" style={{ color: 'var(--text-muted)' }} dateTime={post.date}>
-                {new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' })}
-              </time>
+              <p className="mb-3" style={{ color: 'var(--text-muted)' }}>{post.excerpt}</p>
+              <div className="flex justify-between items-center">
+                <time className="text-xs" style={{ color: 'var(--text-muted)' }} dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString('pt-BR', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </time>
+                <Link 
+                  href={`/blog/${post.slug}`}
+                  className="text-sm font-medium hover:underline"
+                  style={{ color: 'var(--accent-color)' }}
+                >
+                  Ler mais →
+                </Link>
+              </div>
             </motion.article>
           ))}
         </div>
